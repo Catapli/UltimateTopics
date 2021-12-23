@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menuHome"
+        android:title="Home"
+        android:icon="@drawable/ic_home"
+        app:showAsAction="always"
+        android:iconTint="@color/black"/>
+    <item
+        android:id="@+id/menuSearch"
+        android:title="Search"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="always"
+        android:iconTint="@color/black"/>
+    <item
+        android:id="@+id/menuStats"
+        android:title="Stats"
+        android:icon="@drawable/ic_equalizer"
+        app:showAsAction="always"
+        android:iconTint="@color/black"/>
+    <item
+        android:id="@+id/menuPerson"
+        android:title="Profile"
+        android:icon="@drawable/ic_person"
+        app:showAsAction="always"
+        android:iconTint="@color/black"/>
+
+</menu>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.topics.Activities.PrincipalActivity">
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="#FF03DAC5"
+        app:fabAlignmentMode="end"
+        app:collapseIcon="@color/black"
+        app:fabCradleMargin="10dp"
+        app:fabCradleRoundedCornerRadius="15dp"
+        app:hideOnScroll="true"
+        app:menu="@menu/app_bar_menu"
+        app:navigationIconTint="@color/black" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        android:backgroundTint="#FF3700B3"
+        app:layout_anchor="@id/bottomNav"
+        app:maxImageSize="35dp"
+        app:tint="@color/white"/>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RecyclerViewPrincipal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="1dp"
+            />
+
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

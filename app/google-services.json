@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "182503103947",
+    "firebase_url": "https://topics-2021-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "topics-2021",
+    "storage_bucket": "topics-2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182503103947:android:911e61897a9f8649a8aa4e",
+        "android_client_info": {
+          "package_name": "com.example.topics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182503103947-dli0ul1aialic5vf1q6q8vlrrpovqq1o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkBqS4FgMmWRa5yAeNLRkM_HCk7KgxXnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182503103947-dli0ul1aialic5vf1q6q8vlrrpovqq1o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

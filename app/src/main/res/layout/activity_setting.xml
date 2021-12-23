@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.topics.Activities.Settings.SettingActivity">
+
+    <TextView
+        android:id="@+id/Cuenta"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:text="Cuenta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Seguridad"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:text="Seguridad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Cuenta" />
+
+    <TextView
+        android:id="@+id/Notificaciones"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:text="Notificaciones"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Seguridad" />
+
+    <TextView
+        android:id="@+id/SuscripcionesAjustes"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:text="Suscripciones"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Notificaciones" />
+
+    <TextView
+        android:id="@+id/metodosPago"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:text="Metodos de Pago"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SuscripcionesAjustes" />
+
+    <TextView
+        android:id="@+id/cerrarSesión"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:text="Cerrar Sesión"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/metodosPago" />
+
+    <TextView
+        android:id="@+id/AutentificarSettings"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:visibility="invisible"
+        android:text="Autentificar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cerrarSesión" />
+</androidx.constraintlayout.widget.ConstraintLayout>
