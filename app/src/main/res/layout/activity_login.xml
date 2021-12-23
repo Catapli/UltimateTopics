@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     tools:context="com.example.topics.Activities.AccesCount.LoginActivity">
+
+    <EditText
+         android:id="@+id/EditTextCorreo"
+         android:layout_width="0dp"
+         android:layout_height="45dp"
+         android:layout_marginTop="250dp"
+         android:ems="10"
+         android:hint="Email"
+         android:inputType="textEmailAddress"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+         android:id="@+id/errorNameCountLogin"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/EditTextCorreo" />
+
+    <EditText
+         android:id="@+id/EditTextContraseña"
+         android:layout_width="0dp"
+         android:layout_height="45dp"
+         android:layout_marginTop="25dp"
+         android:ems="10"
+         android:hint="Contraseña"
+         android:inputType="textPassword"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.496"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/errorNameCountLogin" />
+
+    <TextView
+         android:id="@+id/errorPasswordLogin"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/EditTextContraseña" />
+
+    <CheckBox
+         android:id="@+id/checkboxLogin"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="20dp"
+         android:text="Mostrar contraseña"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/errorPasswordLogin" />
+
+    <ImageView
+         android:id="@+id/imageView2"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="35dp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent"
+         app:srcCompat="@drawable/ic_isotipo_topics" />
+
+    <TextView
+         android:id="@+id/textView4"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="35dp"
+         android:text="INICIAR SESIÓN"
+         android:textColor="#000000"
+         android:textSize="34sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/imageView2"
+         tools:ignore="MissingConstraints" />
+
+    <FrameLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="20dp"
+         android:animateLayoutChanges="true"
+         app:layout_constraintTop_toBottomOf="@+id/checkboxLogin"
+         app:flow_horizontalAlign="center">
+
+        <ImageButton
+             android:id="@+id/imageButton2"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="55dp"
+             android:background="#00FFFFFF"
+             android:onClick="validarDatos"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/checkboxLogin"
+             app:srcCompat="@drawable/ic_boton_inicio_sesi_n" />
+
+        <ProgressBar
+             android:id="@+id/progresBar"
+             android:layout_width="25dp"
+             android:layout_height="25dp"
+             android:layout_gravity="center"
+             android:visibility="invisible"/>
+
+
+    </FrameLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
