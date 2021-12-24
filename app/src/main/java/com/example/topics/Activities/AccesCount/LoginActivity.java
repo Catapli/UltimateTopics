@@ -114,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     private void init(){
@@ -132,13 +133,15 @@ public class LoginActivity extends AppCompatActivity {
     private void loading (boolean isLoading){
         if (isLoading){
             binding.progresBar.setVisibility(View.VISIBLE);
+            binding.imageButton2.setVisibility(View.INVISIBLE);
         }else {
             binding.progresBar.setVisibility(View.INVISIBLE);
+            binding.imageButton2.setVisibility(View.VISIBLE);
         }
     }
 
 
-    public void validarDatos(View view) {
+    public void validarDatos() {
         loading(true);
         if (utilitarios.comprobarDatos(email, password, errorPassword, errorName)) {
             String e = email.getText().toString().toLowerCase(Locale.ROOT);
@@ -152,12 +155,12 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 if (user.isEmailVerified()){
-
                                     api.changeEmailVerifiedInhabilitados(mAuth.getCurrentUser().getUid());
                                 }
                                 Log.d("Login", String.valueOf(user.isEmailVerified()));
                                 loginUser(e, errorName);
                             } else {
+                                loading(false);
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
                                 errorPassword.setText(task.getException().getMessage());
@@ -187,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         if (!task.getResult().isEmpty()) {
+                            loading(false);
                             DocumentSnapshot doc = task.getResult().getDocuments().get(0);
                             if (doc.get(Constants.KEY_HABILITADO).toString().equals("false")) {
                                 Intent intent = new Intent(LoginActivity.this, NoHabilitadoActivity.class);
@@ -202,6 +206,7 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
                         } else {
+                            loading(false);
                             loginUserInhabilitado(text,textView);
                         }
                     }

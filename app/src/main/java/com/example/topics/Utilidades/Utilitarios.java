@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.topics.Modelo.User;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -224,7 +225,7 @@ public class Utilitarios extends AppCompatActivity {
         usuario.put(Constants.KEY_ID_USER, u.getId());
         usuario.put(Constants.KEY_NAME_USER, u.getNombreCuenta());
         usuario.put(Constants.KEY_NAME, u.getNombre());
-        usuario.put(Constants.KEY_HABILITADO, false);
+        usuario.put(Constants.KEY_HABILITADO, true);
         usuario.put(Constants.KEY_PHOTO_PERFIL, u.getUrlPerfil());
         usuario.put(Constants.KEY_EMAIL, u.getEmail());
 
@@ -234,5 +235,6 @@ public class Utilitarios extends AppCompatActivity {
         usuario.put(Constants.KEY_DESCARGABLE, false);
         return usuario;
     }
+
 
 }

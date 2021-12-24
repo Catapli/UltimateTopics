@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.topics.Activities.Auth.AutentificationActivity;
 import com.example.topics.Activities.Dialogos.LogOutDialogFragment;
 import com.example.topics.R;
+import com.example.topics.Utilidades.Constants;
+import com.example.topics.Utilidades.PreferenceManager;
 import com.example.topics.Utilidades.Utilitarios;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,12 +29,15 @@ public class SettingActivity extends AppCompatActivity {
 
     private Utilitarios utilitarios;
 
+    private PreferenceManager preferenceManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_setting);
         utilitarios = new Utilitarios();
+        preferenceManager = new PreferenceManager(getApplicationContext());
         cuenta = findViewById(R.id.Cuenta);
         cuenta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,15 +99,15 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void isAdmin(){
-        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         db = FirebaseFirestore.getInstance();
-        db.collection("users").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        String id = preferenceManager.getString(Constants.KEY_ID_USER);
+        db.collection(Constants.KEY_COLLECTION_USERS).document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
                     DocumentSnapshot doc = task.getResult();
                     try {
-                        boolean admin = doc.getBoolean("admin");
+                        boolean admin = doc.getBoolean(Constants.KEY_ADMIN);
                         if (admin){
                             authPeople.setVisibility(View.VISIBLE);
                         }

@@ -1,6 +1,7 @@
 package com.example.topics.Adaptadores;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +54,9 @@ public class AdaptadorTop extends RecyclerView.Adapter<AdaptadorTop.ViewHolderTo
     @Override
     public void onBindViewHolder(@NonNull ViewHolderTop holder, int position) {
         holder.nameCount.setText(users.get(position).getNombreCuenta());
-        holder.suscriptores.setText("Total de Seguidores: " + users.get(position).getTop());
+        holder.suscriptores.setText("Total de Seguidores: " + users.get(position).getSeguidores());
         holder.nuevosSuscriptores.setText("Seguidores Nuevos" + users.get(position).getNuevosSubsTop());
+        Log.d("PRUEBA ", "Seguidores Nuevos" + users.get(position).getNuevosSubsTop());
         Glide.with(context).load(perfilDefault).into(holder.fotoPerfil);
 
         switch (position){

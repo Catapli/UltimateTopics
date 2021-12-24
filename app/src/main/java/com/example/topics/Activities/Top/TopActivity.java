@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.topics.Activities.Perfil;
 import com.example.topics.Activities.PrincipalActivity;
@@ -19,9 +20,13 @@ import com.example.topics.Activities.Upload.UploadImage;
 import com.example.topics.Adaptadores.AdaptadorTop;
 import com.example.topics.Modelo.User;
 import com.example.topics.R;
+import com.example.topics.Utilidades.Constants;
+import com.example.topics.Utilidades.Utilitarios;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -50,6 +55,9 @@ public class TopActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
+    private ArrayList<User> TopDiario, TopMensual, TopSemanal;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,50 +65,36 @@ public class TopActivity extends AppCompatActivity {
         setContentView(R.layout.activity_top);
         init();
         setListeners();
-        diario.setTextColor(Color.BLUE);
-        diario.setBackgroundColor(Color.parseColor("#FFE0B2"));
-        semanal.setBackgroundColor(Color.parseColor("#FFE0B2"));
-        mensual.setBackgroundColor(Color.parseColor("#FFE0B2"));
 
-        diario.setClickable(false);
-        diario.setOnClickListener(new View.OnClickListener() {
+        ViewPager2 viewPager2 = findViewById(R.id.viewPager);
+        viewPager2.setAdapter(new TopAdapter(this));
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(
+                tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
-            public void onClick(View view) {
-                diario.setTextColor(Color.BLUE);
-                diario.setClickable(false);
-                semanal.setClickable(true);
-                mensual.setClickable(true);
-                mensual.setTextColor(Color.BLACK);
-                semanal.setTextColor(Color.BLACK);
-                inicializarTarifas("TopDiario");
-            }
-        });
-        mensual.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mensual.setTextColor(Color.BLUE);
-                mensual.setClickable(false);
-                semanal.setClickable(true);
-                diario.setClickable(true);
-                diario.setTextColor(Color.BLACK);
-                semanal.setTextColor(Color.BLACK);
-                inicializarTarifas("TopMensual");
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                switch (position){
+                    case 0:{
+                        tab.setText("Top Diario");
+                        tab.setIcon(R.drawable.ic_add);
 
-
+                        break;
+                    }
+                    case 1:{
+                        tab.setText("Top Semanal");
+                        tab.setIcon(R.drawable.ic_add);
+                        break;
+                    }
+                    case 2:{
+                        tab.setText("Top Mensual");
+                        tab.setIcon(R.drawable.ic_add);
+                        break;
+                    }
+                }
             }
-        });
-        semanal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                semanal.setTextColor(Color.BLUE);
-                semanal.setClickable(false);
-                mensual.setClickable(true);
-                diario.setClickable(true);
-                mensual.setTextColor(Color.BLACK);
-                diario.setTextColor(Color.BLACK);
-                inicializarTarifas("TopSemanal");
-            }
-        });
+        }
+        );
+        tabLayoutMediator.attach();
     }
 
     private void init(){
@@ -112,10 +106,11 @@ public class TopActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         db = FirebaseFirestore.getInstance();
         storageReference = storage.getReference();
-        recyclerView = findViewById(R.id.recyclerViewTop);
-        diario = findViewById(R.id.diario);
-        mensual = findViewById(R.id.mensual);
-        semanal = findViewById(R.id.semanal);
+
+    }
+
+    private void chargeUsers(String text){
+
     }
 
     private void setListeners(){
@@ -197,7 +192,7 @@ public class TopActivity extends AppCompatActivity {
         ArrayList<User> usuarios = new ArrayList<>();
         db.collection(text)
                 .orderBy("seguidores", Query.Direction.DESCENDING)
-                .limit(50).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .limit(51).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for (QueryDocumentSnapshot doc : task.getResult()){
@@ -214,16 +209,16 @@ public class TopActivity extends AppCompatActivity {
                         usuarios.add(user);
                     }
                 }
-                mostrarPosiblesResultados(usuarios);
+              //  mostrarPosiblesResultados(usuarios);
             }
         });
     }
 
-    public void mostrarPosiblesResultados(ArrayList<User> usuarios){
-        recyclerView = findViewById(R.id.recyclerViewTop);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        AdaptadorTop adaptadorTop = new AdaptadorTop(usuarios,this);
-        recyclerView.setAdapter(adaptadorTop);
-    }
+//    public void mostrarPosiblesResultados(ArrayList<User> usuarios){
+//        recyclerView = findViewById(R.id.recyclerViewTop);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        AdaptadorTop adaptadorTop = new AdaptadorTop(usuarios,this);
+//        recyclerView.setAdapter(adaptadorTop);
+//    }
 
 }

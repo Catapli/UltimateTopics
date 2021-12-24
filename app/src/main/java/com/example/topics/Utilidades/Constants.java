@@ -3,9 +3,7 @@ package com.example.topics.Utilidades;
 public class Constants {
     public static final String KEY_COLLECTION_USERS = "users";
     public static final String KEY_COLLECTION_SOCIAL = "Social";
-    public static final String KEY_COLLECTION_TOP_DIARIO = "TopDiario";
-    public static final String KEY_COLLECTION_TOP_MENSUAL = "TopMensual";
-    public static final String KEY_COLLECTION_TOP_SEMANAL = "TopSemanal";
+    public static final String KEY_COLLECTION_TOP = "Top";
     public static final String KEY_COLLECTION_INHABILITADOS = "inhabilitados";
     public static final String KEY_COLLECTION_CHATS = "Chats";
     public static final String KEY_EMAIL = "email";
@@ -46,6 +44,9 @@ public class Constants {
     public static final String KEY_IMAGE_SEGUIDOR = "ImgSeguidor";
     public static final String KEY_RUTA_POST = "RutaImagen";
     public static final String KEY_DESCRIPCION = "descripcion";
+    public static final String KEY_TOP_DIARIO = "SeguidoresDiario";
+    public static final String KEY_TOP_SEMANAL = "SeguidoresSemanales";
+    public static final String KEY_TOP_MENSUAL = "SeguidoresMensuales";
 
 
 

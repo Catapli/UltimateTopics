@@ -6,83 +6,34 @@
     android:layout_height="match_parent"
     tools:context="com.example.topics.Activities.Top.TopActivity">
 
-    <TextView
-        android:id="@+id/diario"
-        android:layout_width="130dp"
-        android:layout_height="90dp"
-        android:gravity="center"
-        android:text="Diario"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/mensual"
-        android:layout_width="128dp"
-        android:layout_height="90dp"
-        android:gravity="center"
-        android:text="Mensual"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/semanal"
-        android:layout_width="152dp"
-        android:layout_height="90dp"
-        android:gravity="center"
-        android:text="Semanal"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <View
-        android:id="@+id/divider2"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="90dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_height="3dp"
+        android:background="#FFD180"
+        app:layout_constraintBottom_toBottomOf="@+id/tabLayout"/>
 
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="1dp"
-        android:layout_height="90dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/divider2"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF3700B3"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="130dp" />
+        app:tabTextColor="@color/white"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed"
+        app:tabPaddingBottom="8dp"
+        app:tabPaddingTop="15dp"/>
 
-    <View
-        android:id="@+id/divider5"
-        android:layout_width="1dp"
-        android:layout_height="90dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/divider2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="282dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewTop"
-        android:layout_width="0dp"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        app:layout_constraintBottom_toBottomOf="@+id/limit"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"/>
+
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/limit"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

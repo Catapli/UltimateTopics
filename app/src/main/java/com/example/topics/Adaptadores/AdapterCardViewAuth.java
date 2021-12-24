@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.topics.Activities.Auth.DetallesAuthActivity;
 import com.example.topics.Modelo.User;
 import com.example.topics.R;
+import com.example.topics.Utilidades.Constants;
 
 import java.util.ArrayList;
 
@@ -57,16 +58,16 @@ public class AdapterCardViewAuth extends  RecyclerView.Adapter<AdapterCardViewAu
             ViewHolderAuth sh = (ViewHolderAuth) view.getTag();
             int posicion = sh.getAdapterPosition();
             Intent intent = new Intent(context, DetallesAuthActivity.class);
-            intent.putExtra("email",users.get(posicion).getEmail());
-            intent.putExtra("urlRostro",users.get(posicion).getUrlRostro());
-            intent.putExtra("urlDni",users.get(posicion).getUrlDni());
-            intent.putExtra("urlPerfil",users.get(posicion).getUrlPerfil());
-            intent.putExtra("nacimiento",users.get(posicion).getFecha());
-            intent.putExtra("id",users.get(posicion).getId());
-            intent.putExtra("name",users.get(posicion).getNombre());
-            intent.putExtra("nameCount",users.get(posicion).getNombreCuenta());
-            intent.putExtra("password",users.get(posicion).getPassword());
-            intent.putExtra("token",users.get(posicion).getToken());
+            intent.putExtra(Constants.KEY_EMAIL,users.get(posicion).getEmail());
+            intent.putExtra(Constants.KEY_ROSTRO,users.get(posicion).getUrlRostro());
+            intent.putExtra(Constants.KEY_DNI,users.get(posicion).getUrlDni());
+            intent.putExtra(Constants.KEY_PHOTO_PERFIL,users.get(posicion).getUrlPerfil());
+            intent.putExtra(Constants.KEY_DATE,users.get(posicion).getFecha());
+            intent.putExtra(Constants.KEY_ID_USER,users.get(posicion).getId());
+            intent.putExtra(Constants.KEY_NAME,users.get(posicion).getNombre());
+            intent.putExtra(Constants.KEY_NAME_USER,users.get(posicion).getNombreCuenta());
+            intent.putExtra(Constants.KEY_PASSWORD,users.get(posicion).getPassword());
+            intent.putExtra(Constants.KEY_TOKEN,users.get(posicion).getToken());
             context.startActivity(intent);
         }
     });

@@ -175,19 +175,19 @@ public class PerfilAjeno extends AppCompatActivity {
 
 
     public void sumarSeguidor(){
-            sumarSeguidorTop(Constants.KEY_COLLECTION_TOP_SEMANAL);
-            sumarSeguidorTop(Constants.KEY_COLLECTION_TOP_MENSUAL);
-            sumarSeguidorTop(Constants.KEY_COLLECTION_TOP_DIARIO);
+            sumarSeguidorTop();
     }
 
 
 
-    public void sumarSeguidorTop(String texto){
+    public void sumarSeguidorTop(){
         int seguidores = Integer.parseInt(numSeguidores.getText().toString());
         Map<String, Object> dataUsuario = new HashMap<>();
-        dataUsuario.put(Constants.KEY_SEGUIDORES, String.valueOf(seguidores+1));
+        dataUsuario.put(Constants.KEY_TOP_SEMANAL, String.valueOf(seguidores+1));
+        dataUsuario.put(Constants.KEY_TOP_DIARIO, String.valueOf(seguidores+1));
+        dataUsuario.put(Constants.KEY_TOP_MENSUAL, String.valueOf(seguidores+1));
         dataUsuario.put(Constants.KEY_SEGUIDORES_TOTALES, String.valueOf(seguidores+1));
-        db.collection(texto)
+        db.collection(Constants.KEY_COLLECTION_TOP)
                 .document(user.getId())
                 .set(dataUsuario, SetOptions.merge());
     }

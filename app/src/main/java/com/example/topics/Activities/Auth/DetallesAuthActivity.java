@@ -63,8 +63,8 @@ public class DetallesAuthActivity extends AppCompatActivity {
                         .set(data);
                 db.collection(Constants.KEY_COLLECTION_INHABILITADOS).document(user.getEmail()).delete();
                 insertInTops();
-                insertSocialInformation();
                 insertUserInformation();
+                deleteDocument();
                 returnListado();
             }
         });
@@ -81,31 +81,21 @@ public class DetallesAuthActivity extends AppCompatActivity {
     public void insertInTops(){
         String id = user.getId();
         HashMap<String, Object> userMap = new HashMap<>();
-        userMap.put(Constants.KEY_SEGUIDORES,0);
+        userMap.put(Constants.KEY_PHOTO_PERFIL, user.getUrlPerfil());
+        userMap.put(Constants.KEY_TOP_DIARIO,0);
+        userMap.put(Constants.KEY_TOP_MENSUAL,0);
+        userMap.put(Constants.KEY_TOP_SEMANAL,0);
+        userMap.put(Constants.KEY_ID_USER,user.getId());
         userMap.put(Constants.KEY_NAME_USER, user.getNombreCuenta());
         userMap.put(Constants.KEY_SEGUIDORES_TOTALES, 0);
-        db.collection(Constants.KEY_COLLECTION_TOP_DIARIO).document(id)
-                .set(userMap);
-        db.collection(Constants.KEY_COLLECTION_TOP_MENSUAL).document(id)
-                .set(userMap);
-        db.collection(Constants.KEY_COLLECTION_TOP_SEMANAL).document(id)
+        db.collection(Constants.KEY_COLLECTION_TOP).document(id)
                 .set(userMap);
     }
 
-
-    public void insertSocialInformation(){
-        db = FirebaseFirestore.getInstance();
-        String id = user.getId();
-        HashMap<String,Object> userMap = new HashMap<>();
-        userMap.put(Constants.KEY_EMAIL,user.getEmail());
-        db.collection(Constants.KEY_COLLECTION_SOCIAL).document(id)
-                .set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Log.d(TAG,"INSERCION SOCIAL CON EXITO");
-            }
-        });
+    private void deleteDocument(){
+        db.collection(Constants.KEY_COLLECTION_INHABILITADOS).document(user.getId()).delete();
     }
+
 
     public void insertUserInformation(){
         db = FirebaseFirestore.getInstance();

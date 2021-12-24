@@ -73,6 +73,7 @@ public class DesuscribirseDialogFragment extends DialogFragment {
                             DocumentSnapshot doc = task.getResult().getDocuments().get(0);
                             DocumentReference documentReference = doc.getReference();
                             documentReference.delete();
+                            restarSeguidorTop();
                             Log.d("BORRADO", documentReference.getId());
                         }
                     }
@@ -103,18 +104,14 @@ public class DesuscribirseDialogFragment extends DialogFragment {
         return userToDesuscribe;
     }
 
-    public void restarSeguidor(){
-        restarSeguidorTop(Constants.KEY_COLLECTION_TOP_DIARIO);
-        restarSeguidorTop(Constants.KEY_COLLECTION_TOP_MENSUAL);
-        restarSeguidorTop(Constants.KEY_COLLECTION_TOP_SEMANAL);
-    }
-
-    public void restarSeguidorTop(String texto){
+    public void restarSeguidorTop(){
         int seguidores = Integer.parseInt(userToDesuscribe.getSeguidores());
         Map<String, Object> dataUsuario = new HashMap<>();
-        dataUsuario.put(Constants.KEY_SEGUIDORES, String.valueOf(seguidores - 1));
+        dataUsuario.put(Constants.KEY_TOP_SEMANAL, String.valueOf(seguidores - 1));
+        dataUsuario.put(Constants.KEY_TOP_MENSUAL, String.valueOf(seguidores - 1));
+        dataUsuario.put(Constants.KEY_TOP_DIARIO, String.valueOf(seguidores - 1));
         dataUsuario.put(Constants.KEY_SEGUIDORES_TOTALES, String.valueOf(seguidores - 1));
-        db.collection(texto)
+        db.collection(Constants.KEY_COLLECTION_TOP)
                 .document(userToDesuscribe.getId())
                 .set(dataUsuario, SetOptions.merge());
     }

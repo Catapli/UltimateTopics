@@ -31,12 +31,15 @@
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/activity_subir_validacion.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/activity_suscription_settings.xml" value="0.3421875" />
-        <entry key="app/src/main/res/layout/activity_top.xml" value="0.3421875" />
+        <entry key="app/src/main/res/layout/activity_top.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_upload_image.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/activity_users_chat.xml" value="0.3421875" />
-        <entry key="app/src/main/res/layout/cardview_top.xml" value="0.3421875" />
+        <entry key="app/src/main/res/layout/cardview_top.xml" value="0.33" />
         <entry key="app/src/main/res/layout/cardviewauth.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/cardviewprincipal.xml" value="0.3421875" />
+        <entry key="app/src/main/res/layout/fragment_top_diario.xml" value="0.31657608695652173" />
+        <entry key="app/src/main/res/layout/fragment_top_mensual.xml" value="0.3421875" />
+        <entry key="app/src/main/res/layout/fragment_top_semanal.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/item_container_received_message.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/item_container_recent_conversion.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/item_container_sent_message.xml" value="0.3421875" />

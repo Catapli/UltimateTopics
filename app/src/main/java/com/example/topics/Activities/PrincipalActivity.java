@@ -29,12 +29,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PrincipalActivity extends AppCompatActivity {
     private static final String TAG = "Lectura";
@@ -65,7 +67,7 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_principal);
         init();
         setListeners();
-        String id = preferenceManager.getString(Constants.KEY_ID_USER);
+        String id = mAuth.getCurrentUser().getUid();
         foundAllSeguidos(id);
         readData(id);
     }
@@ -91,6 +93,7 @@ public class PrincipalActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         utilitarios = new Utilitarios();
         FirebaseUser user = mAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
         mAuth.updateCurrentUser(user);
         add = findViewById(R.id.add);
         home = findViewById(R.id.menuHome);
@@ -227,6 +230,8 @@ public class PrincipalActivity extends AppCompatActivity {
         post.setUser(nameUser);
         return post;
     }
+
+
 
 
 

@@ -55,6 +55,7 @@ public class AutentificationActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                         for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("VALIDATION",document.get(Constants.KEY_PHOTO_PERFIL).toString());
                             User u = queryToUser(document);
                             Log.d("VALIDATION",u.toString());
                             users.add(u);
