@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.topics.Adaptadores.AdaptadorTop;
 import com.example.topics.Modelo.User;
@@ -37,6 +38,8 @@ public class TopMensualFragment extends Fragment {
     private RecyclerView recyclerView;
 
     private ArrayList<User> users;
+
+    private ProgressBar progressBar;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -79,10 +82,22 @@ public class TopMensualFragment extends Fragment {
         // Inflate the layout for this fragment
         View vista = inflater.inflate(R.layout.fragment_top_mensual, container, false);
         recyclerView = vista.findViewById(R.id.recyclerViewTopMensual);
+        progressBar = vista.findViewById(R.id.progresBar);
+        isLoading(true);
         users = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         getUsers();
         return vista;
+    }
+
+    private void isLoading(boolean loading){
+        if (loading){
+            progressBar.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }else {
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void getUsers() {
@@ -94,6 +109,7 @@ public class TopMensualFragment extends Fragment {
                     User user = docToUser(doc);
                     users.add(user);
                 }
+                isLoading(false);
                 AdaptadorTop adaptadorTop = new AdaptadorTop(users, getContext());
                 recyclerView.setAdapter(adaptadorTop);
             }

@@ -2,6 +2,7 @@ package com.example.topics.Activities.Dialogos;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,7 +37,7 @@ public class DesuscribirseDialogFragment extends DialogFragment {
 
     private Utilitarios utilitarios;
 
-    public DesuscribirseDialogFragment(String idUser, String idToDesuscribe) {
+    public DesuscribirseDialogFragment(String idUser, String idToDesuscribe, Context context) {
         User userToDesuscribe = new User();
         userToDesuscribe.setId(idToDesuscribe);
         utilitarios = new Utilitarios();

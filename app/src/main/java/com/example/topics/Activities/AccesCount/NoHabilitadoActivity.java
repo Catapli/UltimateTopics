@@ -24,7 +24,7 @@ public class NoHabilitadoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_no_habilitado);
-        utilitarios = new Utilitarios();
+        utilitarios = new Utilitarios(getApplicationContext());
         volverLogin = findViewById(R.id.ReturnLogin);
         Intent intent = getIntent();
         String email = intent.getExtras().getString(Constants.KEY_EMAIL);

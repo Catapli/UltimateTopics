@@ -12,18 +12,27 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.topics.Modelo.Post;
 import com.example.topics.Modelo.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Utilitarios extends AppCompatActivity {
 
     private Api api;
 
-    public Utilitarios() {
+    private PreferenceManager preferenceManager;
+
+    public Utilitarios(Context context) {
+        this.preferenceManager = new PreferenceManager(context);
         this.api = new Api();
+    }
+
+    public Utilitarios() {
     }
 
     public static final String VALID_EMAIL_ADDRESS_REGEX = "^(.+)@(.+)$";
@@ -234,6 +243,16 @@ public class Utilitarios extends AppCompatActivity {
         usuario.put(Constants.KEY_PRICE, 0);
         usuario.put(Constants.KEY_DESCARGABLE, false);
         return usuario;
+    }
+
+    public HashMap<String, Object> createMapfromPost(Post post){
+        HashMap<String,Object> map = new HashMap<>();
+        map.put(Constants.KEY_DESCARGABLE, post.isDescargable());
+        map.put(Constants.KEY_DESCRIPCION,post.getDescripcion());
+        map.put(Constants.KEY_PRICE,post.getPrecio());
+        map.put(Constants.KEY_ID_CUENTA, preferenceManager.getString(Constants.KEY_ID_USER));
+        map.put(Constants.KEY_DATE, new Date());
+        return map;
     }
 
 

@@ -62,14 +62,18 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage(){
+        String text = binding.inputMessage.getText().toString().trim();
+        if (text.length() <= 0 || text.equals(" ") ||text.equals(null)){
+            return;
+        }
         HashMap<String, Object> message = new HashMap<>();
         message.put(Constants.KEY_ID_EMISOR, preferenceManager.getString(Constants.KEY_ID_USER));
         message.put(Constants.KEY_ID_RECEPTOR, receivedUser.getId());
-        message.put(Constants.KEY_MESSAGE, binding.inputMessage.getText().toString());
+        message.put(Constants.KEY_MESSAGE, text);
         message.put(Constants.KEY_TIMESTAMP, new Date());
         db.collection(Constants.KEY_COLLECTION_CHATS).add(message);
         if (conversionId != null){
-            updateConversion(binding.inputMessage.getText().toString());
+            updateConversion(text);
         }else {
             HashMap<String, Object> conversion = new HashMap<>();
             conversion.put(Constants.KEY_ID_EMISOR, preferenceManager.getString(Constants.KEY_ID_USER));
@@ -78,7 +82,7 @@ public class ChatActivity extends AppCompatActivity {
             conversion.put(Constants.KEY_ID_RECEPTOR, receivedUser.getId());
             conversion.put(Constants.KEY_RECEIVER_NAME, receivedUser.getNombreCuenta());
             conversion.put(Constants.KEY_RECEIVER_IMAGE, receivedUser.getUrlPerfil());
-            conversion.put(Constants.KEY_LAST_MESSAGE,binding.inputMessage.getText().toString());
+            conversion.put(Constants.KEY_LAST_MESSAGE,text);
             conversion.put(Constants.KEY_TIMESTAMP, new Date());
             addConversion(conversion);
         }

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.topics.Activities.DetallesImagen;
 import com.example.topics.Modelo.Post;
 import com.example.topics.R;
+import com.example.topics.Utilidades.Constants;
 
 import java.util.ArrayList;
 
@@ -58,9 +59,9 @@ public class PostsAdapterCronologico extends RecyclerView.Adapter<PostsAdapterCr
             ViewHolderCronologico sh = (ViewHolderCronologico) view.getTag();
             int posicion = sh.getAdapterPosition();
             Intent intent = new Intent(context, DetallesImagen.class);
-            intent.putExtra("email",posts.get(posicion).getEmailuser());
-            intent.putExtra("descripcion",posts.get(posicion).getDescripcion());
-            intent.putExtra("urlImage",posts.get(posicion).getUrlImagen());
+            intent.putExtra(Constants.KEY_ID_USER,posts.get(posicion).getIdUser());
+            intent.putExtra(Constants.KEY_DESCRIPCION,posts.get(posicion).getDescripcion());
+            intent.putExtra(Constants.KEY_RUTA_POST,posts.get(posicion).getUrlImagen());
             context.startActivity(intent);
         }
     });

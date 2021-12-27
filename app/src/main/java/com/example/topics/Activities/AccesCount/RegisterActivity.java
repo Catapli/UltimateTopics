@@ -180,7 +180,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void init(){
-        utilitarios = new Utilitarios();
+        utilitarios = new Utilitarios(getApplicationContext());
         api = new Api();
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();

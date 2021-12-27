@@ -13,10 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.topics.Activities.Top.TopActivity;
 import com.example.topics.Activities.Upload.UploadImage;
+import com.example.topics.Adaptadores.AdaptadorExplore;
+import com.example.topics.Adaptadores.PostAdapter;
 import com.example.topics.Adaptadores.SearchAdapterPosts;
+import com.example.topics.Modelo.Post;
 import com.example.topics.Modelo.User;
 import com.example.topics.R;
 import com.example.topics.Utilidades.Constants;
@@ -25,6 +29,7 @@ import com.example.topics.Utilidades.Utilitarios;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -54,6 +59,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         init();
         setListeners();
+        chargePosts();
         buscar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -77,14 +83,44 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void init(){
-        utilitarios = new Utilitarios();
+        db = FirebaseFirestore.getInstance();
+        utilitarios = new Utilitarios(getApplicationContext());
         preferenceManager = new PreferenceManager(getApplicationContext());
         buscar = findViewById(R.id.EditTextSearch);
+        recyclerView = findViewById(R.id.RecyclerViewSearch);
         add = findViewById(R.id.add);
         home = findViewById(R.id.menuHome);
         search = findViewById(R.id.menuSearch);
         top = findViewById(R.id.menuStats);
         profile = findViewById(R.id.menuPerson);
+    }
+
+    private void chargePosts(){
+        ArrayList<Post> posts = new ArrayList<>();
+        db.collection(Constants.KEY_COLLECTION_POSTS).whereEqualTo(Constants.KEY_PRICE,0)
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0){
+                        for (DocumentSnapshot doc: task.getResult()){
+                            Post post = createPost(doc);
+                            posts.add(post);
+                        }
+                        recyclerView.setLayoutManager(
+                                new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+                        );
+                        recyclerView.setAdapter(new AdaptadorExplore(posts));
+
+                    }
+        });
+    }
+
+    private Post createPost(DocumentSnapshot doc){
+        Post post = new Post();
+        post.setIdUser(doc.getString(Constants.KEY_ID_CUENTA));
+        post.setDescargable(doc.getBoolean(Constants.KEY_DESCARGABLE));
+        post.setPrecio(Integer.parseInt(doc.get(Constants.KEY_PRICE).toString()));
+        post.setUrlImagen(doc.getString(Constants.KEY_RUTA_POST));
+        post.setDescripcion(doc.getString(Constants.KEY_DESCRIPCION));
+        return post;
     }
 
     private void setListeners(){
@@ -105,7 +141,6 @@ public class SearchActivity extends AppCompatActivity {
 
     public void foundAllUsuarios(String text){
         ArrayList<User> usuarios = new ArrayList<>();
-        db = FirebaseFirestore.getInstance();
         db.collection(Constants.KEY_COLLECTION_USERS).whereGreaterThanOrEqualTo(Constants.KEY_NAME_USER,text)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -139,7 +174,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void mostrarPosiblesResultados(ArrayList<User> usuarios){
-        recyclerView = findViewById(R.id.RecyclerViewSearch);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         SearchAdapterPosts postAdapter= new SearchAdapterPosts(usuarios,this);
         recyclerView.setAdapter(postAdapter);

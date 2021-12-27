@@ -36,7 +36,7 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_setting);
-        utilitarios = new Utilitarios();
+        utilitarios = new Utilitarios(getApplicationContext());
         preferenceManager = new PreferenceManager(getApplicationContext());
         cuenta = findViewById(R.id.Cuenta);
         cuenta.setOnClickListener(new View.OnClickListener() {

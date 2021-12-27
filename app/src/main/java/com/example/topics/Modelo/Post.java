@@ -2,11 +2,6 @@ package com.example.topics.Modelo;
 
 import android.net.Uri;
 
-import com.example.topics.Utilidades.Constants;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class Post {
 
     private String codigoImagen;
@@ -19,9 +14,13 @@ public class Post {
 
     private boolean descargable;
 
-    private String emailuser;
+    private String idUser;
 
     private String user;
+
+    private String userFoto;
+
+
 
     public Post(String codigoImagen) {
         this.codigoImagen = codigoImagen;
@@ -38,6 +37,15 @@ public class Post {
     public Post() {
     }
 
+
+    public String getUserFoto() {
+        return userFoto;
+    }
+
+    public void setUserFoto(String userFoto) {
+        this.userFoto = userFoto;
+    }
+
     public String getUser() {
         return user;
     }
@@ -46,21 +54,15 @@ public class Post {
         this.user = user;
     }
 
-    public String getEmailuser() {
-        return emailuser;
+    public String getIdUser() {
+        return idUser;
     }
 
-    public void setEmailuser(String emailuser) {
-        this.emailuser = emailuser;
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 
-    public static Map<String, Object> createMapfromPost(Post post){
-        Map<String,Object> map = new HashMap<>();
-        map.put(Constants.KEY_DESCARGABLE, post.isDescargable());
-        map.put(Constants.KEY_DESCRIPCION,post.getDescripcion());
-        map.put(Constants.KEY_PRICE,post.getPrecio());
-        return map;
-    }
+
 
 
 
@@ -101,6 +103,9 @@ public class Post {
                 ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +
                 ", descargable=" + descargable +
+                ", idUser='" + idUser + '\'' +
+                ", user='" + user + '\'' +
+                ", userFoto='" + userFoto + '\'' +
                 '}';
     }
 

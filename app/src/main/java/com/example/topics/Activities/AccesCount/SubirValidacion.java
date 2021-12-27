@@ -94,7 +94,7 @@ public class SubirValidacion extends AppCompatActivity {
 
 
     public void insertUserGoogle(User usuario){
-        Utilitarios utilitarios = new Utilitarios();
+        Utilitarios utilitarios = new Utilitarios(getApplicationContext());
         HashMap<String, Object> user = utilitarios.userToHashMapUsers(usuario);
         db.collection(Constants.KEY_COLLECTION_USERS).document(usuario.getId()).set(user, SetOptions.merge());
     }

@@ -145,4 +145,27 @@ public class User implements Serializable {
     public void setDescargable(boolean descargable) {
         this.descargable = descargable;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "token='" + token + '\'' +
+                ", id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", fecha='" + fecha + '\'' +
+                ", nombreCuenta='" + nombreCuenta + '\'' +
+                ", urlPerfil='" + urlPerfil + '\'' +
+                ", seguidores='" + seguidores + '\'' +
+                ", seguidos='" + seguidos + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", UrlDni='" + UrlDni + '\'' +
+                ", UrlRostro='" + UrlRostro + '\'' +
+                ", nuevosSubsTop='" + nuevosSubsTop + '\'' +
+                ", top='" + top + '\'' +
+                ", habilitado=" + habilitado +
+                ", descargable=" + descargable +
+                '}';
+    }
 }

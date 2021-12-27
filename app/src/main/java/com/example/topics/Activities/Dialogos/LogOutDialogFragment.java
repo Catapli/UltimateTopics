@@ -11,9 +11,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.topics.Activities.AccesCount.CargaActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LogOutDialogFragment extends DialogFragment {
+
+    private GoogleSignInClient mGoogleSignInClient;
 
     @NonNull
     @Override
@@ -40,6 +46,8 @@ public class LogOutDialogFragment extends DialogFragment {
         Intent intent = new Intent(this.getActivity(), CargaActivity.class);
         startActivity(intent);
     }
+
+
 
 
 

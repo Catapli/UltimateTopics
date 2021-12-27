@@ -23,6 +23,7 @@ import com.example.topics.Modelo.Post;
 import com.example.topics.R;
 import com.example.topics.Utilidades.Constants;
 import com.example.topics.Utilidades.PreferenceManager;
+import com.example.topics.Utilidades.Utilitarios;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +42,7 @@ import java.util.UUID;
 
 public class UploadImage extends AppCompatActivity {
 
-    private ImageButton escogerImagen,cargarImagen;
+    private ImageButton cargarImagen;
 
     private String idImagen;
 
@@ -57,15 +58,15 @@ public class UploadImage extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
-    private static final int PICK_IMAGE_REQUEST = 71;
-
-    private static final int PICK_VIDEO = 1;
 
     private EditText editTextDescripcion;
 
     private Post post;
 
-    private static int FACTOR = 5;
+    private Utilitarios utilitarios;
+
+
+    private static final int SELECT_PICTURE = 1;
 
     private PreferenceManager preferenceManager;
 
@@ -75,58 +76,74 @@ public class UploadImage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_upload_image);
-        escogerImagen = findViewById(R.id.escogerImagen);
+        init();
+        setListeners();
+        Intent pickIntent = new Intent();
+        pickIntent.setType("image/*");
+        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
+        Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+        chooserIntent.putExtra
+                (
+                        Intent.EXTRA_INITIAL_INTENTS,
+                        new Intent[] { takePhotoIntent }
+                );
+
+        startActivityForResult(chooserIntent, SELECT_PICTURE);
+    }
+
+    private void init(){
+
         cargarImagen = findViewById(R.id.buttonSubirImage);
         imagen = findViewById(R.id.imageView);
         firebaseStorage = FirebaseStorage.getInstance();
         preferenceManager = new PreferenceManager(getApplicationContext());
         storageReference = firebaseStorage.getReference();
-        escogerImagen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chooseImage();
-            }
-        });
+        mAuth = FirebaseAuth.getInstance();
+         utilitarios= new Utilitarios(getApplicationContext());
+        db = FirebaseFirestore.getInstance();
+        String id = mAuth.getCurrentUser().getUid();
+        storageReference = FirebaseStorage.getInstance().getReference().child(id);
+    }
+
+    private void setListeners(){
         cargarImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 subirImage();
             }
         });
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        String email = mAuth.getCurrentUser().getEmail();
-        storageReference = FirebaseStorage.getInstance().getReference().child(email);
-    }
-    public void chooseImage() {
-        Intent intent = new Intent ();
-        intent.setType ("image/*");
-        intent.setAction (Intent.ACTION_GET_CONTENT);
-        startActivityForResult (Intent.createChooser (intent, "Seleccionar imagen"), PICK_IMAGE_REQUEST);
+
     }
 
-    public void chooseVideo(){
-        Intent intent = new Intent ();
-        intent.setType ("video/*");
-        intent.setAction (Intent.ACTION_GET_CONTENT);
-        startActivityForResult (intent, PICK_VIDEO);
-    }
+
 
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
-            filePath = data.getData();
-            Toast.makeText(UploadImage.this,filePath.getPath(),Toast.LENGTH_SHORT).show();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imagen.setImageBitmap(bitmap);
-
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (requestCode == SELECT_PICTURE && data != null ){
+            if (data.getData() != null){
+                filePath = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                    imagen.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                imagen.setImageBitmap(imageBitmap);
             }
+
+
+
+
         }
     }
 
@@ -166,12 +183,12 @@ public class UploadImage extends AppCompatActivity {
         String rutaImagen ="/images/" + idImagen;
         editTextDescripcion = findViewById(R.id.EditDescripcion);
         String  descripcion = editTextDescripcion.getText().toString();
-        db = FirebaseFirestore.getInstance();
-        String email = preferenceManager.getString(Constants.KEY_EMAIL);
+        String id = preferenceManager.getString(Constants.KEY_ID_USER);
         FirebaseStorage storage  = FirebaseStorage.getInstance();
-        StorageReference gsReference = storage.getReferenceFromUrl("gs://topics-2021.appspot.com/"+email+rutaImagen);
-        post = new Post(descripcion);
-        Map<String,Object> map = Post.createMapfromPost(post);
+        StorageReference gsReference = storage.getReferenceFromUrl(Constants.KEY_URL_ROOT_FIREBASE+id+rutaImagen);
+        post = new Post();
+        post.setDescripcion(descripcion);
+        HashMap<String,Object> map = utilitarios.createMapfromPost(post);
         db.collection(Constants.KEY_COLLECTION_POSTS).add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
@@ -194,10 +211,8 @@ public class UploadImage extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 Map<String, Object> data = new HashMap<>();
                 data.put(Constants.KEY_RUTA_POST, uri.toString());
-                data.put(Constants.KEY_ID_CUENTA,preferenceManager.getString(Constants.KEY_ID_USER));
                 db.collection(Constants.KEY_COLLECTION_POSTS).document(id)
                         .set(data, SetOptions.merge());
-
             }
         });
 

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.topics.R;
+import com.example.topics.Utilidades.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,20 +30,23 @@ public class DetallesImagen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_detalles_imagen);
+        init();
+        Intent intent = getIntent();
+        String url = intent.getExtras().getString(Constants.KEY_RUTA_POST);
+        String descripcion = intent.getExtras().getString(Constants.KEY_DESCRIPCION);
+        String idUser = intent.getExtras().getString(Constants.KEY_ID_USER);
+        String user = intent.getExtras().getString(Constants.KEY_NAME_USER);
+        Glide.with(this).load(url).into(imageView);
+        textViewDescripcion.setText(descripcion);
+        textViewNombre.setText(user);
+    }
+
+    private void init(){
         mAuth = FirebaseAuth.getInstance();
         textViewDescripcion = findViewById(R.id.DetallesImagenDescripcion);
         imageView = findViewById(R.id.DetallesPostImagen);
         textViewNombre = findViewById(R.id.DetallesImagenNombreCuenta);
-        Intent intent = getIntent();
-        String url = intent.getExtras().getString("urlImage");
-        Log.d("DETALLE", url);
-        String descripcion = intent.getExtras().getString("descripcion");
-        String email = intent.getExtras().getString("email");
-        String user = intent.getExtras().getString("user");
-        Glide.with(this).load(url).into(imageView);
-        textViewDescripcion.setText(descripcion);
-        textViewNombre = findViewById(R.id.DetallesImagenNombreCuenta);
-        textViewNombre.setText(user);
+
     }
 
 

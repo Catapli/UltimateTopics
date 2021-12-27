@@ -47,7 +47,9 @@ public class Constants {
     public static final String KEY_TOP_DIARIO = "SeguidoresDiario";
     public static final String KEY_TOP_SEMANAL = "SeguidoresSemanales";
     public static final String KEY_TOP_MENSUAL = "SeguidoresMensuales";
-
+    public static final String KEY_NAME_USER_CUENTA = "nameUserCuenta";
+    public static final String KEY_NAME_USER_SEGUIDOR = "nameUserSeguidor";
+    public static final String KEY_URL_ROOT_FIREBASE = "gs://topics-2021.appspot.com/";
 
 
 }

@@ -91,10 +91,8 @@ public class PerfilAjeno extends AppCompatActivity {
         Intent intent = getIntent();
         String id = intent.getExtras().getString(Constants.KEY_ID_USER);
         setListeners(id);
-
         readData(id);
         foundAllPosts(id,1);
-
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -106,10 +104,11 @@ public class PerfilAjeno extends AppCompatActivity {
     }
 
     private void init(){
+        db = FirebaseFirestore.getInstance();
         imagenPerfil = findViewById(R.id.imagenPerfilAjeno);
         galeria = findViewById(R.id.buttonMostrarGaleriaAjeno);
         preferenceManager = new PreferenceManager(getApplicationContext());
-        utilitarios = new Utilitarios();
+        utilitarios = new Utilitarios(getApplicationContext());
         storage = FirebaseStorage.getInstance();
         user = new User();
         postsCronologicos = findViewById(R.id.buttonMostrarPostsAjeno);
@@ -132,13 +131,11 @@ public class PerfilAjeno extends AppCompatActivity {
 
     }
 
-    private void setListeners(String idCount){
-        galeria.setOnClickListener(view -> foundAllPosts(idCount,1));
-        postsCronologicos.setOnClickListener(view -> foundAllPosts(idCount,2));
+    private void setListeners(String id){
+        galeria.setOnClickListener(view -> foundAllPosts(id,1));
+        postsCronologicos.setOnClickListener(view -> foundAllPosts(id,2));
         seguir.setOnClickListener(view -> {
-            String id = preferenceManager.getString(Constants.KEY_ID_USER);
-            isSeguido(id,user.getId());
-            refresh();
+            isSeguido(id,preferenceManager.getString(Constants.KEY_ID_USER));
         });
         home.setOnClickListener(view -> {
             startActivity(new Intent(this, PrincipalActivity.class));
@@ -156,7 +153,7 @@ public class PerfilAjeno extends AppCompatActivity {
             startActivity(new Intent(this, Perfil.class));
         });
     }
-    public void isSeguido(String idUser, String idCuenta){
+    public void isSeguido(String idCuenta, String idUser){
         db.collection(Constants.KEY_COLLECTION_SEGUIDORES)
                 .whereEqualTo(Constants.KEY_ID_CUENTA, idCuenta)
                 .whereEqualTo(Constants.KEY_ID_SEGUIDOR, idUser)
@@ -165,7 +162,7 @@ public class PerfilAjeno extends AppCompatActivity {
                         if (task.getResult().isEmpty()){
                             insertarSeguidor(user);
                         }else {
-                            DesuscribirseDialogFragment logOutDialogFragment = new DesuscribirseDialogFragment(idUser,idCuenta);
+                            DesuscribirseDialogFragment logOutDialogFragment = new DesuscribirseDialogFragment(idUser,idCuenta,PerfilAjeno.this);
                             logOutDialogFragment.show(getSupportFragmentManager(),"logOut");
                             refresh();
                         }
@@ -222,6 +219,8 @@ public class PerfilAjeno extends AppCompatActivity {
             dataUser.put(Constants.KEY_IMAGE_CUENTA, userCount.getUrlPerfil());
             dataUser.put(Constants.KEY_ID_SEGUIDOR, preferenceManager.getString(Constants.KEY_ID_USER));
             dataUser.put(Constants.KEY_IMAGE_SEGUIDOR, preferenceManager.getString(Constants.KEY_PHOTO_PERFIL));
+            dataUser.put(Constants.KEY_NAME_USER_SEGUIDOR, preferenceManager.getString(Constants.KEY_NAME_USER));
+            dataUser.put(Constants.KEY_NAME_USER_CUENTA, userCount.getNombreCuenta());
             dataUser.put(Constants.KEY_TIMESTAMP, new Date());
             db.collection(Constants.KEY_COLLECTION_SEGUIDORES).add(dataUser);
     }
@@ -247,16 +246,17 @@ public class PerfilAjeno extends AppCompatActivity {
         recyclerView.setAdapter(postAdapter);
     }
 
-    public void foundAllPosts(String emailUser, int num){
-        db.collection("users").document(emailUser)
-                .collection("Posts").orderBy("FechaCreacion", Query.Direction.DESCENDING).get()
+    public void foundAllPosts(String id,int num){
+        db.collection(Constants.KEY_COLLECTION_POSTS)
+                .whereEqualTo(Constants.KEY_ID_CUENTA, id)
+                .orderBy(Constants.KEY_DATE, Query.Direction.DESCENDING).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             ArrayList<Post> posts = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Post post = createPost(document, emailUser);
+                                Post post = createPost(document);
                                 posts.add(post);
                             }
                             if (num == 1){
@@ -272,15 +272,13 @@ public class PerfilAjeno extends AppCompatActivity {
                 });
     }
 
-    public Post createPost(QueryDocumentSnapshot documentSnapshot, String email){
+    public Post createPost(QueryDocumentSnapshot documentSnapshot){
         Post post = new Post();
-        mAuth = FirebaseAuth.getInstance();
-        String rutaImagen = "/"+email + documentSnapshot.get("RutaImagen").toString();
-        post.setCodigoImagen(rutaImagen);
-        String url = documentSnapshot.get("Url").toString();
-        String descripcion = documentSnapshot.get("Descripcion").toString();
+        String id = user.getId();
+        String url = documentSnapshot.getString(Constants.KEY_RUTA_POST);
+        String descripcion = documentSnapshot.getString(Constants.KEY_DESCRIPCION);
         post.setDescripcion(descripcion);
-        post.setEmailuser(email);
+        post.setIdUser(id);
         post.setUrlImagen(url);
         return post;
     }

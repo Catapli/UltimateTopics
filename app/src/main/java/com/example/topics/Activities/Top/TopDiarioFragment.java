@@ -87,7 +87,7 @@ public class TopDiarioFragment extends Fragment {
         users = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         getUsers();
-        isLoading(false);
+
         return vista;
     }
 
@@ -110,6 +110,7 @@ public class TopDiarioFragment extends Fragment {
                     User user = docToUser(doc);
                     users.add(user);
                 }
+                isLoading(false);
                 AdaptadorTop adaptadorTop = new AdaptadorTop(users, getContext());
                 recyclerView.setAdapter(adaptadorTop);
             }

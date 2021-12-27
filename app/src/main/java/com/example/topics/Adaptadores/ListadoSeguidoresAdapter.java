@@ -76,7 +76,7 @@ public class ListadoSeguidoresAdapter extends RecyclerView.Adapter<ListadoSeguid
 
         public ViewHolderListadoUsers(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.imageViewFotoPerfilSearch);
+            imageView = itemView.findViewById(R.id.imageProfileList);
             nombre = itemView.findViewById(R.id.nombreRealSearch);
             nombreCuenta = itemView.findViewById(R.id.nombreCuentaSearch);
             cardView = itemView.findViewById(R.id.SearchCardView);

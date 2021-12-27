@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        utilitarios = new Utilitarios();
+        utilitarios = new Utilitarios(getApplicationContext());
         api = new Api();
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();

@@ -2,6 +2,7 @@ package com.example.topics.Adaptadores;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.topics.Activities.DetallesImagen;
 import com.example.topics.Modelo.Post;
 import com.example.topics.R;
+import com.example.topics.Utilidades.Constants;
 
 import java.util.ArrayList;
 
@@ -43,6 +45,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 .into(holder.imageView);
         holder.cardView.setOnClickListener(onClickListener);
         holder.cardView.setTag(holder);
+        Log.d("POST", posts.get(position).toString());
 
     }
 
@@ -51,10 +54,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public void onClick(View view) {
             ViewHolder sh = (ViewHolder) view.getTag();
             int posicion = sh.getAdapterPosition();
+            Log.d("POST", posts.get(posicion).toString());
             Intent intent = new Intent(context, DetallesImagen.class);
-            intent.putExtra("email",posts.get(posicion).getEmailuser());
-            intent.putExtra("descripcion",posts.get(posicion).getDescripcion());
-            intent.putExtra("urlImage",posts.get(posicion).getUrlImagen());
+            intent.putExtra(Constants.KEY_ID_USER,posts.get(posicion).getIdUser());
+            intent.putExtra(Constants.KEY_NAME_USER, posts.get(posicion).getUser());
+            intent.putExtra(Constants.KEY_DESCRIPCION,posts.get(posicion).getDescripcion());
+            intent.putExtra(Constants.KEY_RUTA_POST,posts.get(posicion).getUrlImagen());
             context.startActivity(intent);
         }
     });

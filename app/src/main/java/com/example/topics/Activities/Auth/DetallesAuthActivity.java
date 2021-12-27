@@ -43,7 +43,7 @@ public class DetallesAuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,WindowManager.LayoutParams.FLAG_SECURE);
         user=new User();
-        utilitarios = new Utilitarios();
+        utilitarios = new Utilitarios(getApplicationContext());
         db = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity_detalles_auth);
         rostro = findViewById(R.id.imageViewRostrovalidate);

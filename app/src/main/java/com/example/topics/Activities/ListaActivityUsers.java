@@ -3,8 +3,11 @@ package com.example.topics.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.topics.Adaptadores.ListadoSeguidoresAdapter;
 import com.example.topics.Modelo.User;
 import com.example.topics.R;
+import com.example.topics.Utilidades.Constants;
+import com.example.topics.Utilidades.PreferenceManager;
 import com.example.topics.Utilidades.Utilitarios;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,13 +35,19 @@ public class ListaActivityUsers extends AppCompatActivity {
 
     private EditText editText;
 
+    private TextView textView;
+
     private RecyclerView recyclerView;
 
     private FirebaseFirestore db;
 
     private Utilitarios utilitarios;
 
-    private final ArrayList<User> USUARIOS = new ArrayList<>();
+    private PreferenceManager preferenceManager;
+
+    private ProgressBar progressBar;
+
+    private ArrayList<User> users = new ArrayList<>();
 
 
 
@@ -45,86 +56,94 @@ public class ListaActivityUsers extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_lista_users);
-        utilitarios = new Utilitarios();
-        editText = findViewById(R.id.editTextListado);
-        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        init();
         Intent intent = getIntent();
         String cadena = intent.getExtras().getString("modo");
-        db = FirebaseFirestore.getInstance();
-        if (cadena.equals("Seguidores")){
+
+        if (cadena.equals(Constants.KEY_SEGUIDORES)){
+            foundAllSeguidores();
         }else {
-            foundAllSeguidos(email);
+            foundAllSeguidos();
+        }
+    }
+
+    private void init(){
+        utilitarios = new Utilitarios(getApplicationContext());
+        editText = findViewById(R.id.editTextListado);
+        textView = findViewById(R.id.TextViewErrorListado);
+        recyclerView = findViewById(R.id.recylerViewListado);
+        progressBar = findViewById(R.id.progresBar);
+        isLoading(true);
+        db = FirebaseFirestore.getInstance();
+        users = new ArrayList<>();
+        preferenceManager = new PreferenceManager(getApplicationContext());
+    }
+
+    public void foundAllSeguidores(){
+        db.collection(Constants.KEY_COLLECTION_SEGUIDORES)
+                .whereEqualTo(Constants.KEY_ID_CUENTA, preferenceManager.getString(Constants.KEY_ID_USER))
+                .get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                if (!task.getResult().isEmpty()){
+                    for (DocumentSnapshot doc : task.getResult()){
+                        User u = new User();
+                        u.setId(doc.getString(Constants.KEY_ID_CUENTA));
+                        u.setNombreCuenta(doc.getString(Constants.KEY_NAME_USER_CUENTA));
+                        u.setUrlPerfil(doc.getString(Constants.KEY_IMAGE_CUENTA));
+                        users.add(u);
+                    }
+                    mostrarPosiblesResultados(users);
+                }else {
+                    progressBar.setVisibility(View.GONE);
+                    textView.setText("No followers found");
+                    textView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    private void isLoading(boolean loading){
+        if (loading){
+            progressBar.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }else {
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
 
 
-    public void foundAllSeguidos(String email){
-        db.collection("Social").document(email)
-                .collection("Seguidos").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
-                                User u = new User();
-                                u.setEmail(documentSnapshot.getId());
-                                completeInformation(u);
-
-                            }
-                            if (USUARIOS.size() == 0){
-                                Toast.makeText(ListaActivityUsers.this,"NO TIENES SEGUIDOS",Toast.LENGTH_LONG).show();
-                            }else {
-                                Log.d("Listado Total",USUARIOS.get(0).toString());
-                                mostrarPosiblesResultados(USUARIOS);
-                            }
-                        }
-                    }
-                });
-    }
-
-    public void completeInformation(User u){
-            db.collection("users").document(u.getEmail())
-                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+    public void foundAllSeguidos(){
+        db.collection(Constants.KEY_SEGUIDORES)
+                .whereEqualTo(Constants.KEY_ID_SEGUIDOR, preferenceManager.getString(Constants.KEY_ID_USER))
+                .get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
-                        if (task.getResult().exists()){
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            if (documentSnapshot != null) {
-                                User u = createUser(documentSnapshot);
-                                USUARIOS.add(u);
-                                Log.d("Listado",USUARIOS.size()+"");
-                            }else  {
-                                Log.d("SEGUIDOS","ES NULL");
+                        if (!task.getResult().isEmpty()){
+                            for (DocumentSnapshot doc : task.getResult()){
+                                User u = new User();
+                                u.setId(doc.getString(Constants.KEY_ID_CUENTA));
+                                u.setNombreCuenta(doc.getString(Constants.KEY_NAME_USER_CUENTA));
+                                u.setUrlPerfil(doc.getString(Constants.KEY_IMAGE_CUENTA));
+                                users.add(u);
                             }
+                            mostrarPosiblesResultados(users);
+                        }else {
+                            textView.setText("No followers found");
+                            textView.setVisibility(View.VISIBLE);
                         }
-                    }else {
-                        Log.d("SEGUIDOS","ERROR");
                     }
-                }
-            });
+        });
     }
+
 
     public void mostrarPosiblesResultados(ArrayList<User> usuarios){
-        recyclerView = findViewById(R.id.recylerViewListado);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ListadoSeguidoresAdapter postAdapter= new ListadoSeguidoresAdapter(usuarios,this);
         recyclerView.setAdapter(postAdapter);
-    }
-
-    public User createUser(DocumentSnapshot documentSnapshot){
-        User usuario = new User();
-        String nameCount = documentSnapshot.getString("nameCount");
-        String name = documentSnapshot.getString("name");
-        String urlImagen = documentSnapshot.getString("UrlPerfil");
-        String email = documentSnapshot.get("email").toString();
-        usuario.setNombreCuenta(nameCount);
-        usuario.setNombre(name);
-        usuario.setUrlPerfil(urlImagen);
-        usuario.setEmail(email);
-        return usuario;
+        isLoading(false);
     }
 
 

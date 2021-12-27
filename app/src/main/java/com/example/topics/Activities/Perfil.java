@@ -39,7 +39,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -93,12 +92,12 @@ public class Perfil extends AppCompatActivity {
         setListeners();
         String id = preferenceManager.getString(Constants.KEY_ID_USER);
         readData(id);
-        foundAllPosts(id,1);
+        foundAllPosts(1);
     }
 
     private void init(){
         preferenceManager = new PreferenceManager(getApplicationContext());
-        utilitarios = new Utilitarios();
+        utilitarios = new Utilitarios(getApplicationContext());
         db = FirebaseFirestore.getInstance();
         imagenPerfil = findViewById(R.id.imageProfile);
         storage = FirebaseStorage.getInstance();
@@ -134,16 +133,16 @@ public class Perfil extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), SettingActivity.class));
         });
         numSeguidores.setOnClickListener(view -> {
-            startActivity(new Intent(getApplicationContext(), ListaActivityUsers.class).putExtra("modo", "Seguidores"));
+            startActivity(new Intent(getApplicationContext(), ListaActivityUsers.class).putExtra("modo", Constants.KEY_SEGUIDORES));
         });
         numSeguidos.setOnClickListener(view -> {
-            startActivity(new Intent(getApplicationContext(), ListaActivityUsers.class).putExtra("modo", "Seguidos"));
+            startActivity(new Intent(getApplicationContext(), ListaActivityUsers.class).putExtra("modo", Constants.KEY_SEGUIDOS));
         });
         postsCronologicos.setOnClickListener( view -> {
-            foundAllPosts(preferenceManager.getString(Constants.KEY_ID_USER),2);
+            foundAllPosts(2);
         });
         galeria.setOnClickListener(view -> {
-            foundAllPosts(preferenceManager.getString(Constants.KEY_ID_USER),1);
+            foundAllPosts(1);
         });
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -190,39 +189,38 @@ public class Perfil extends AppCompatActivity {
         recyclerView.setAdapter(postAdapter);
     }
 
-    public void foundAllPosts(String emailUser, int num){
-        db.collection("users").document(emailUser).collection("Posts").orderBy("FechaCreacion", Query.Direction.DESCENDING).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            ArrayList<Post> posts = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Post post = createPost(document);
-                                posts.add(post);
-                            }
-                            if (num == 1){
-                                inicializarElementosGridLayout(posts);
-                            }else if (num == 2){
-                                inicializarElementosOrdenCronologico(posts);
-                            }
+    public void foundAllPosts(int num){
+        db.collection(Constants.KEY_COLLECTION_POSTS)
+                .whereEqualTo(Constants.KEY_ID_CUENTA, preferenceManager.getString(Constants.KEY_ID_USER))
+                .orderBy(Constants.KEY_DATE, Query.Direction.DESCENDING)
+                .get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("DOCUMENTS", task.getResult().getDocuments().size()+"");
+                ArrayList<Post> posts = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Post post = createPost(document);
+                    posts.add(post);
+                }
+                if (num == 1){
+                    inicializarElementosGridLayout(posts);
+                }else if (num == 2){
+                    inicializarElementosOrdenCronologico(posts);
+                }
 
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+            } else {
+                Log.w(TAG, "Error getting documents.", task.getException());
+            }
+
+        });
     }
 
     public Post createPost(QueryDocumentSnapshot documentSnapshot){
         Post post = new Post();
-        String id = mAuth.getCurrentUser().getUid();
-        String rutaImagen = "/"+id + documentSnapshot.get("RutaImagen").toString();
-        post.setCodigoImagen(rutaImagen);
-        String url = documentSnapshot.get("Url").toString();
-        String descripcion = documentSnapshot.get("Descripcion").toString();
+        String id = preferenceManager.getString(Constants.KEY_ID_USER);
+        String url = documentSnapshot.getString(Constants.KEY_RUTA_POST);
+        String descripcion = documentSnapshot.getString(Constants.KEY_DESCRIPCION);
         post.setDescripcion(descripcion);
-        post.setEmailuser(id);
+        post.setIdUser(id);
         post.setUrlImagen(url);
         return post;
     }
@@ -246,8 +244,8 @@ public class Perfil extends AppCompatActivity {
                         nombreCuenta.setText(user.getNombreCuenta());
                         nombre.setText(user.getNombre());
                         descripcion.setText(user.getDescripcion());
-                        api.countSeguidores(user.getId(), numSeguidores);
-                        api.countSeguidos(user.getId(), numSeguidos);
+                        api.countSeguidores(id, numSeguidores);
+                        api.countSeguidos(id, numSeguidos);
                 } else {
                     Log.w(TAG, "Error getting documents.", task.getException());
                 }
